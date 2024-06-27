@@ -56,6 +56,7 @@ const LogIn = ({ setIsLoggedIn }) => {
     margin: "25% auto",
     padding: 20,
     textAlign: "center",
+    color: "#404156",
   };
 
   return (
@@ -66,7 +67,7 @@ const LogIn = ({ setIsLoggedIn }) => {
           variant="outlined"
           elevation={10}
           style={paperStyle}
-          sx={{ border: "3px solid orange" }}
+          sx={{ border: "3px solid" }}
         >
           <div style={{ textAlign: "center" }}>
             <Typography variant="h4" gutterBottom>
@@ -76,7 +77,7 @@ const LogIn = ({ setIsLoggedIn }) => {
               <TextField
                 label="Email"
                 variant="outlined"
-                color="warning"
+                color="primary"
                 fullWidth
                 type="email"
                 margin="normal"
@@ -87,7 +88,7 @@ const LogIn = ({ setIsLoggedIn }) => {
                 label="Password"
                 type="password"
                 variant="outlined"
-                color="warning"
+                color="primary"
                 fullWidth
                 margin="normal"
                 value={password}
@@ -96,7 +97,7 @@ const LogIn = ({ setIsLoggedIn }) => {
               <Button
                 variant="contained"
                 fullWidth
-                color="warning"
+                color="primary"
                 type="submit"
                 style={{ marginTop: "20px" }}
               >

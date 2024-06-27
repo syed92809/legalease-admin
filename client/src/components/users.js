@@ -60,8 +60,9 @@ const Users = () => {
           maxWidth: "800px",
           margin: "10% auto",
           maxHeight: "800px",
+          color: "#404156",
         }}
-        sx={{ border: "2px solid orange" }}
+        sx={{ border: "2px solid" }}
       >
         <div className="d-flex justify-content-between align-items-center">
           <h3 className="ms-4 my-0">Users List</h3>

@@ -138,37 +138,37 @@ export const Fonts = {
   },
 
   darkPrimaryColor15Medium: {
-    color: "#B9770E",
+    color: "#404156",
     fontSize: 15.0,
     fontFamily: "Roboto_Medium",
   },
 
   darkPrimaryColor16Medium: {
-    color: "#B9770E",
+    color: "#404156",
     fontSize: 16.0,
     fontFamily: "Roboto_Medium",
   },
 
   primaryColor15Regular: {
-    color: "#F8971D",
+    color: "#404156",
     fontSize: 15.0,
     fontFamily: "Roboto_Regular",
   },
 
   primaryColor14Medium: {
-    color: "#F8971D",
+    color: "#404156",
     fontSize: 14.0,
     fontFamily: "Roboto_Medium",
   },
 
   primaryColor16Medium: {
-    color: "#F8971D",
+    color: "#404156",
     fontSize: 16.0,
     fontFamily: "Roboto_Medium",
   },
 
   primaryColor20MediumBold: {
-    color: "#F8971D",
+    color: "#404156",
     fontSize: 20.0,
     fontFamily: "Roboto_Medium",
     fontWeight: "bold",
@@ -196,10 +196,10 @@ export const Fonts = {
 export const Colors = {
   whiteColor: "#ffffff",
   blackColor: "#000000",
-  primaryColor: "#F8971D",
+  primaryColor: "#404156",
   bodyBackColor: "#F4F4F4",
   grayColor: "#9E9E9E",
-  darkPrimaryColor: "#B9770E",
+  darkPrimaryColor: "#404156",
   ratingColor: "#CDDC39",
   orangeRatingColor: "#FF9800",
   redColor: "#F44336",

@@ -5,30 +5,18 @@ import Restaurants from "./components/restaurants";
 import Users from "./components/users";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
-
-import OTP from "./pages/otp";
-import ForgotPassword from "./pages/forgotPassword";
-import ChangePassword from "./pages/changePassword";
 import Registration from "./pages/registration";
 import Chat from "./components/chat";
-import Refund from "./pages/refund";
-import ResetPassword from "./pages/resetPassword";
 
 import "./components/sidebar.css";
 import { Link } from "react-router-dom";
 import logo from "./assets/logo.png";
 import Dashboard from "./pages/dashboard";
 import Error from "./pages/error";
-import DisputedList from "./pages/disputedList";
 
 const SidebarData = [
   {
     id: 5,
-    title: "Refund",
-    path: "/refund",
-  },
-  {
-    id: 6,
     title: "Chat Support",
     path: "/support",
   },
@@ -39,10 +27,9 @@ const Sidebar = ({ user }) => {
 
   const adminRoutes = [
     { id: 1, title: "Dashboard", path: "/" },
-    { id: 2, title: "Restaurants", path: "/restaurants" },
+    { id: 2, title: "Lawyers", path: "/restaurants" },
     { id: 3, title: "Users", path: "/users" },
-    { id: 4, title: "Add Role", path: "/register" },
-    { id: 7, title: "Dispute List", path: "/dispute" },
+    { id: 4, title: "Add User", path: "/register" },
     ...SidebarData,
   ];
 
@@ -135,11 +122,6 @@ function App() {
               element={token ? <Dashboard /> : <Navigate to="/login" />}
             />
             <Route
-              path="/dispute"
-              element={<DisputedList admin_name={user.username} />}
-            />
-            <Route path="/refund" element={<Refund />} />
-            <Route
               path="/support"
               element={
                 (token && user.role === "support") || user.role === "admin" ? (
@@ -154,7 +136,6 @@ function App() {
               <>
                 <Route path="/restaurants" element={<Restaurants />} />
                 <Route path="/users" element={<Users />} />
-                <Route path="/refund" element={<Refund />} />
                 <Route path="/register" element={<Registration />} />
                 <Route path="/support" element={<Chat />} />
               </>
@@ -162,7 +143,6 @@ function App() {
             {/* Routes for support */}
             {token && user.role === "support" && (
               <>
-                <Route path="/refund" element={<Refund />} />
                 <Route path="/support" element={<Chat />} />
               </>
             )}

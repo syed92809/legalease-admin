@@ -44,15 +44,12 @@ const ResetPassword = () => {
     height: "auto",
     width: 350,
     margin: "25% auto",
+    color: "#404156",
   };
 
   return (
     <Container maxWidth="xs">
-      <Paper
-        elevation={10}
-        style={paperStyle}
-        sx={{ border: "2px solid orange" }}
-      >
+      <Paper elevation={10} style={paperStyle} sx={{ border: "2px solid" }}>
         <div style={{ marginTop: "20px", textAlign: "center" }}>
           <Typography variant="h4" gutterBottom>
             Reset Password
@@ -62,7 +59,7 @@ const ResetPassword = () => {
               label="New Password"
               type="password"
               variant="outlined"
-              color="warning"
+              color="primary"
               fullWidth
               margin="normal"
               value={newPassword}
@@ -72,7 +69,7 @@ const ResetPassword = () => {
               label="Confirm Password"
               type="password"
               variant="outlined"
-              color="warning"
+              color="primary"
               fullWidth
               margin="normal"
               value={confirmPassword}
@@ -80,7 +77,7 @@ const ResetPassword = () => {
             />
             <Button
               variant="contained"
-              color="warning"
+              color="primary"
               fullWidth
               type="submit"
               style={{ marginTop: "10px" }}

@@ -17,9 +17,9 @@ import { url } from "./url";
 const Dashboard = () => {
   const [count, setCount] = useState({
     revenu: 0,
-    restaurants: 0,
+    lawyers: 0,
     users: 0,
-    orders: 0,
+    services: 0,
   });
   const [earnings, setEarnings] = useState([]);
 
@@ -41,9 +41,9 @@ const Dashboard = () => {
       .then((json) =>
         setCount({
           revenu: json.earning,
-          restaurants: json.restaurantCount,
+          lawyers: json.restaurantCount,
           users: json.userCount,
-          orders: json.orders,
+          services: json.services,
         })
       );
     fetchEarnings();
@@ -67,8 +67,8 @@ const Dashboard = () => {
           <div className="card-body p-4 shadow-sm rounded rounded-3 d-flex align-items-center">
             <IoRestaurantSharp color="#f8971d" size={38} />
             <div className="ms-3">
-              <p className="mb-0">Restaurants</p>
-              <h4 className="text-secondary">{count.restaurants}</h4>
+              <p className="mb-0">Lawyers</p>
+              <h4 className="text-secondary">{count.lawyers}</h4>
             </div>
           </div>
         </div>
@@ -86,8 +86,8 @@ const Dashboard = () => {
           <div className="card-body p-4 shadow-sm rounded rounded-3 d-flex align-items-center">
             <BiSolidDish color="#f8971d" size={38} />
             <div className="ms-3">
-              <p className="mb-0">Orders</p>
-              <h4 className="text-secondary">{count.orders}</h4>
+              <p className="mb-0">Services</p>
+              <h4 className="text-secondary">{count.services}</h4>
             </div>
           </div>
         </div>

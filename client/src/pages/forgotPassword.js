@@ -37,15 +37,12 @@ const ForgotPassword = () => {
     height: "auto",
     width: 350,
     margin: "25% auto",
+    color: "#404156",
   };
 
   return (
     <Container maxWidth="xs">
-      <Paper
-        elevation={10}
-        style={paperStyle}
-        sx={{ border: "2px solid orange" }}
-      >
+      <Paper elevation={10} style={paperStyle} sx={{ border: "2px solid" }}>
         <div style={{ marginTop: "20px", textAlign: "center" }}>
           <Typography variant="h4" gutterBottom>
             Reset Password
@@ -59,7 +56,7 @@ const ForgotPassword = () => {
               label="Email"
               variant="outlined"
               fullWidth
-              color="warning"
+              color="primary"
               type="email"
               margin="normal"
               value={email}

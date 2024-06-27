@@ -78,15 +78,12 @@ const OTP = ({ email, setIsVerified }) => {
     height: "auto",
     width: 350,
     margin: "25% auto",
+    color: "#404156",
   };
 
   return (
     <Container maxWidth="xs">
-      <Paper
-        elevation={10}
-        style={paperStyle}
-        sx={{ border: "2px solid orange" }}
-      >
+      <Paper elevation={10} style={paperStyle} sx={{ border: "2px solid" }}>
         <div style={{ textAlign: "center" }}>
           <Typography variant="h4" gutterBottom>
             Verification
@@ -122,7 +119,7 @@ const OTP = ({ email, setIsVerified }) => {
               <div className="d-flex" style={{ marginTop: "30px" }}>
                 <Button
                   variant="contained"
-                  color="warning"
+                  color="primary"
                   fullWidth
                   type="submit"
                 >

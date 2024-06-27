@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Container, TextField, Button, Typography, Paper } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { url } from "./url";
 
 const Registration = () => {
   const [user, setUser] = useState({
@@ -36,7 +35,7 @@ const Registration = () => {
       } else if (!user.role) {
         toast.error("Please, write role");
       } else {
-        fetch(`${url}/signupAdmin`, {
+        fetch(`http://localhost:Admin/signupAdmin`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -69,6 +68,7 @@ const Registration = () => {
     height: "auto",
     width: 350,
     margin: "40px auto",
+    color: "#404156",
   };
 
   return (
@@ -77,7 +77,7 @@ const Registration = () => {
         variant="outlined"
         elevation={10}
         style={paperStyle}
-        sx={{ border: "2px solid orange" }}
+        sx={{ border: "2px solid" }}
       >
         <div style={{ textAlign: "center" }}>
           <Typography variant="h4" style={{ textAlign: "center" }}>
@@ -92,7 +92,7 @@ const Registration = () => {
               name="username"
               value={user.username}
               onChange={handleChange}
-              color="warning"
+              color="primary"
             />
             <TextField
               label="Email"
@@ -102,7 +102,7 @@ const Registration = () => {
               name="email"
               value={user.email}
               onChange={handleChange}
-              color="warning"
+              color="primary"
             />
             <TextField
               label="Password"
@@ -113,7 +113,7 @@ const Registration = () => {
               name="password"
               value={user.password}
               onChange={handleChange}
-              color="warning"
+              color="primary"
             />
             <TextField
               label="Confirm Password"
@@ -124,7 +124,7 @@ const Registration = () => {
               name="confirmPassword"
               value={user.confirmPassword}
               onChange={handleChange}
-              color="warning"
+              color="primary"
             />
             <TextField
               label="Role"
@@ -134,11 +134,11 @@ const Registration = () => {
               name="role"
               value={user.role}
               onChange={handleChange}
-              color="warning"
+              color="primary"
             />
             <Button
               variant="contained"
-              color="warning"
+              color="primary"
               type="submit"
               fullWidth
               style={{ marginTop: "20px" }}
