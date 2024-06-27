@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaUser, FaDollarSign } from "react-icons/fa";
-import { IoRestaurantSharp } from "react-icons/io5";
-import { BiSolidDish } from "react-icons/bi";
+import { FaBalanceScale } from "react-icons/fa";
+import { FaAtlas } from "react-icons/fa";
 import {
   LineChart,
   Line,
@@ -56,7 +56,7 @@ const Dashboard = () => {
       <div className="row justify-content-between align-items-center">
         <div className="col-md-3">
           <div className="card-body p-4 shadow-sm rounded rounded-3 d-flex align-items-center">
-            <FaDollarSign color="#f8971d" size={38} />
+            <FaDollarSign color="#404156" size={38} />
             <div className="ms-3">
               <p className="mb-0">Revenue</p>
               <h4 className="text-secondary">${count.revenu}</h4>
@@ -65,7 +65,11 @@ const Dashboard = () => {
         </div>
         <div className="col-md-3">
           <div className="card-body p-4 shadow-sm rounded rounded-3 d-flex align-items-center">
-            <IoRestaurantSharp color="#f8971d" size={38} />
+            <FaBalanceScale
+              style={{ fontWeight: 600 }}
+              color="#404156"
+              size={38}
+            />
             <div className="ms-3">
               <p className="mb-0">Lawyers</p>
               <h4 className="text-secondary">{count.lawyers}</h4>
@@ -75,7 +79,7 @@ const Dashboard = () => {
 
         <div className="col-md-3">
           <div className="card-body p-4 shadow-sm rounded rounded-3 d-flex align-items-center">
-            <FaUser color="#f8971d" size={38} />
+            <FaUser color="#404156" size={38} />
             <div className="ms-3">
               <p className="mb-0">Users</p>
               <h4 className="text-secondary">{count.users}</h4>
@@ -84,7 +88,7 @@ const Dashboard = () => {
         </div>
         <div className="col-md-3">
           <div className="card-body p-4 shadow-sm rounded rounded-3 d-flex align-items-center">
-            <BiSolidDish color="#f8971d" size={38} />
+            <FaAtlas color="#404156" size={38} />
             <div className="ms-3">
               <p className="mb-0">Services</p>
               <h4 className="text-secondary">{count.services}</h4>
@@ -102,7 +106,7 @@ const Dashboard = () => {
               <Line
                 type="monotone"
                 dataKey="amount"
-                stroke="#F8971D"
+                stroke="#404156"
                 activeDot={{ r: 8 }}
               />
             </LineChart>

@@ -181,7 +181,7 @@ const Chat = ({ admin_name }) => {
               <div class="input-group-text">
                 <MdOutlineEmojiEmotions
                   size={24}
-                  color="#f8971d"
+                  color="#404156"
                   onClick={toggleEmojiPicker}
                   style={{ cursor: "pointer" }}
                 />

@@ -23,9 +23,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/", authRoute);
-app.use("/", adminRoute);
-app.use("/", chatRoute);
+app.use("/admin", authRoute);
+app.use("/admin", adminRoute);
+app.use("/admin", chatRoute);
 
 chatController.socketServer(server);
 

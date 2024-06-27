@@ -109,7 +109,7 @@ const OTP = ({ email, setIsVerified }) => {
                   textAlign: "center",
                   fontSize: "16px",
                   border: "none",
-                  borderBottom: "2px solid #f8971d",
+                  borderBottom: "2px solid #404156",
                   margin: "0px 10px",
                   padding: "4px 0px",
                   outline: "none",

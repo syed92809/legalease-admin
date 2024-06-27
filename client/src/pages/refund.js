@@ -120,13 +120,13 @@ const Refund = () => {
             <TextField
               fullWidth
               label="Order ID"
-              color="warning"
+              color="primary"
               value={orderId}
               onChange={(e) => setOrderId(e.target.value)}
             />
           </Grid>
           <Grid item xs={12} sm={1}>
-            <Button variant="contained" color="warning" type="submit">
+            <Button variant="contained" color="primary" type="submit">
               Search
             </Button>
           </Grid>
@@ -204,7 +204,7 @@ const Refund = () => {
               fullWidth
               label="User Email"
               name="userEmail"
-              color="warning"
+              color="primary"
               type="email"
               value={formData.userEmail}
               onChange={handleChange}
@@ -215,7 +215,7 @@ const Refund = () => {
               fullWidth
               label="Current Amount"
               name="currentAmount"
-              color="warning"
+              color="primary"
               value={formData.currentAmount}
               onChange={handleChange}
               disabled
@@ -227,7 +227,7 @@ const Refund = () => {
               fullWidth
               label="Refund Amount"
               name="refundAmount"
-              color="warning"
+              color="primary"
               value={formData.refundAmount}
               onChange={handleChange}
             />
@@ -238,7 +238,7 @@ const Refund = () => {
               label="Refund Date"
               type="date"
               name="refundDate"
-              color="warning"
+              color="primary"
               value={formData.refundDate}
               onChange={handleChange}
               InputLabelProps={{
@@ -252,7 +252,7 @@ const Refund = () => {
               label="Expiry Date"
               type="date"
               name="expiryDate"
-              color="warning"
+              color="primary"
               value={formData.expiryDate}
               onChange={handleChange}
               InputLabelProps={{
@@ -261,7 +261,7 @@ const Refund = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Button variant="contained" color="warning" type="submit">
+            <Button variant="contained" color="primary" type="submit">
               Refund
             </Button>
             <ToastContainer s />

@@ -142,14 +142,14 @@ const Restaurants = () => {
         variant="outlined"
         elevation={3}
         style={{ maxWidth: "800px", margin: "10% auto", maxHeight: "800px" }}
-        sx={{ border: "2px solid orange" }}
+        sx={{ border: "2px solid" }}
       >
         <div className="d-flex justify-content-between align-items-center">
           <h3 className="ms-4 my-0">Restaurants List</h3>
           <TextField
             label="Search Restaurant"
             variant="filled"
-            color="warning"
+            color="primary"
             value={searchQuery}
             onChange={handleSearchInputChange}
           />

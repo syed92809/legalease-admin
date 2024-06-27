@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
 import LogIn from "./pages/logIn";
 import Restaurants from "./components/restaurants";
 import Users from "./components/users";
@@ -20,8 +26,10 @@ const SidebarData = [
     title: "Chat Support",
     path: "/support",
   },
+  { id: 6, title: "Log Out", path: "/login" },
 ];
 const Sidebar = ({ user }) => {
+  const navigate = useNavigate();
   const isAdmin = user.role === "admin";
   const isSupport = user.role === "support";
 
@@ -37,6 +45,13 @@ const Sidebar = ({ user }) => {
 
   const routes = isAdmin ? adminRoutes : isSupport ? supportRoutes : [];
 
+  const handleLogout = async (title) => {
+    if (title === "Log Out") {
+      await Cookies.remove("token");
+      window.location.reload();
+    }
+  };
+
   return (
     <div className="sidebar">
       <img
@@ -46,13 +61,17 @@ const Sidebar = ({ user }) => {
         alt="logo"
       />
       <h5 className="text-white text-center mt-3">{user.username}</h5>
-      <p className="text-center mb-5" style={{ color: "#F8B460" }}>
+      <p className="text-center mb-5" style={{ color: "#FFFFFF" }}>
         {user.role}
       </p>
       {routes.map((data) => (
         <ul className="ms-4 mt-4" key={data.id}>
           <li className="nav-link">
-            <Link className="text-decoration-none text-white" to={data.path}>
+            <Link
+              className="text-decoration-none text-white"
+              to={data.path}
+              onClick={() => handleLogout(data.title)}
+            >
               {data.title}
             </Link>
           </li>
