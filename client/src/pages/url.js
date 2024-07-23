@@ -1,1 +1,1 @@
-export const url = "http://localhost:2000/admin";
+export const url = "http://localhost:3000";

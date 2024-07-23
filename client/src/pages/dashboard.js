@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaUser, FaDollarSign } from "react-icons/fa";
-import { FaBalanceScale } from "react-icons/fa";
-import { FaAtlas } from "react-icons/fa";
+import { FaUser, FaDollarSign, FaBalanceScale, FaAtlas } from "react-icons/fa";
 import {
   LineChart,
   Line,
@@ -12,7 +10,8 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { url } from "./url";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase"; // Updated import for Firestore
 
 const Dashboard = () => {
   const [count, setCount] = useState({
@@ -24,32 +23,34 @@ const Dashboard = () => {
   const [earnings, setEarnings] = useState([]);
 
   useEffect(() => {
-    const fetchEarnings = async () => {
+    const fetchCounts = async () => {
       try {
-        const response = await fetch(`${url}/earningsAdmin`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch earnings");
-        }
-        const data = await response.json();
-        setEarnings(data);
+        const db = getFirestore(); // Use the imported Firestore instance
+
+        const lawyersSnapshot = await getDocs(collection(db, "lawyers_information"));
+        const usersSnapshot = await getDocs(collection(db, "client_information"));
+        const servicesSnapshot = await getDocs(collection(db, "contract_information"));
+
+        setCount({
+          revenu: 0, // Revenue will be handled separately
+          lawyers: lawyersSnapshot.size,
+          users: usersSnapshot.size,
+          services: servicesSnapshot.size,
+        });
+
+        console.log("Fetched counts:", {
+          lawyers: lawyersSnapshot.size,
+          users: usersSnapshot.size,
+          services: servicesSnapshot.size,
+        });
       } catch (error) {
-        console.error("Error fetching earnings:", error);
+        console.error("Error fetching counts from Firestore:", error);
       }
     };
-    fetch(`${url}/dashboardAdmin`)
-      .then((res) => res.json())
-      .then((json) =>
-        setCount({
-          revenu: json.earning,
-          lawyers: json.restaurantCount,
-          users: json.userCount,
-          services: json.services,
-        })
-      );
-    fetchEarnings();
+    fetchCounts();
   }, []);
 
-  console.log(earnings);
+  console.log("Earnings state:", earnings);
 
   return (
     <div className="container mt-5">
@@ -65,18 +66,13 @@ const Dashboard = () => {
         </div>
         <div className="col-md-3">
           <div className="card-body p-4 shadow-sm rounded rounded-3 d-flex align-items-center">
-            <FaBalanceScale
-              style={{ fontWeight: 600 }}
-              color="#404156"
-              size={38}
-            />
+            <FaBalanceScale style={{ fontWeight: 600 }} color="#404156" size={38} />
             <div className="ms-3">
               <p className="mb-0">Lawyers</p>
               <h4 className="text-secondary">{count.lawyers}</h4>
             </div>
           </div>
         </div>
-
         <div className="col-md-3">
           <div className="card-body p-4 shadow-sm rounded rounded-3 d-flex align-items-center">
             <FaUser color="#404156" size={38} />
@@ -90,7 +86,7 @@ const Dashboard = () => {
           <div className="card-body p-4 shadow-sm rounded rounded-3 d-flex align-items-center">
             <FaAtlas color="#404156" size={38} />
             <div className="ms-3">
-              <p className="mb-0">Services</p>
+              <p className="mb-0">Contracts</p>
               <h4 className="text-secondary">{count.services}</h4>
             </div>
           </div>
@@ -103,12 +99,7 @@ const Dashboard = () => {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Line
-                type="monotone"
-                dataKey="amount"
-                stroke="#404156"
-                activeDot={{ r: 8 }}
-              />
+              <Line type="monotone" dataKey="amount" stroke="#404156" activeDot={{ r: 8 }} />
             </LineChart>
           </ResponsiveContainer>
         </div>

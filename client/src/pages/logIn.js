@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Container, TextField, Button, Typography, Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-// import OTP from "./otp";
 import Cookies from "js-cookie";
 import { ToastContainer, toast } from "react-toastify";
-import { url } from "./url";
+import { auth, db } from '../firebase'; // Import Firebase configuration
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 const LogIn = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
@@ -21,32 +22,25 @@ const LogIn = ({ setIsLoggedIn }) => {
     checkCookie();
   }, [navigate]);
 
-  const handleLogIn = (e) => {
+  const handleLogIn = async (e) => {
     e.preventDefault();
     try {
-      fetch(`${url}/loginAdmin`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          if (json.success === true) {
-            Cookies.set("token", json.token, { expires: 1 });
-            toast.success(json.message);
-            setTimeout(() => {
-              setIsLoggedIn(true);
-              navigate("/");
-            }, 2000);
-          }
-        });
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Fetch the user document from Firestore
+      const userDoc = await getDoc(doc(db, "admin", user.uid));
+
+      if (userDoc.exists() && userDoc.data().role === "admin") {
+        Cookies.set("token", user.accessToken, { expires: 1 });
+        toast.success("Login successfull !");
+        setIsLoggedIn(true);
+        navigate("/");
+      } else {
+        toast.error("Invalid credentials");
+      }
     } catch (error) {
-      toast.error(error);
+      toast.error("Invalid credentials provided");
     }
   };
 
