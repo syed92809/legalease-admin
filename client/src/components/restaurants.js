@@ -9,106 +9,47 @@ import {
   TableContainer,
   TextField,
   Pagination,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Button,
+  CircularProgress,
+  Backdrop,
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { url } from "../pages/url";
+import { collection, getDocs, doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
-const Modal = ({ selectedRestaurantId, handleCloseModal }) => {
-  const [reason, setReason] = useState("");
-
-  const handleSubmit = async () => {
-    try {
-      if (!reason) {
-        toast.error("Please, Write Reason!");
-      } else {
-        const response = await fetch(
-          `${url}/terminateAdmin/${selectedRestaurantId}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ reason }),
-          }
-        );
-        const data = await response.json();
-        if (data.success === true) {
-          toast.success("Restaurant Terminated");
-          handleCloseModal();
-        } else {
-          throw new Error(data.message || "Failed to terminate restaurant");
-        }
-      }
-    } catch (error) {
-      console.error("Error terminating restaurant:", error.message);
-      toast.error(error.message);
-    }
-  };
-
-  return (
-    <Dialog open={true} onClose={handleCloseModal}>
-      <DialogTitle>Terminate Restaurant</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          Are you sure you want to terminate this restaurant?
-        </DialogContentText>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="reason"
-          label="Reason"
-          type="text"
-          fullWidth
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          color="secondary"
-          type="submit"
-        >
-          Terminate
-        </Button>
-        <ToastContainer />
-      </DialogActions>
-    </Dialog>
-  );
-};
-
-const Restaurants = () => {
-  const [restaurants, setRestaurants] = useState([]);
+const Lawyers = () => {
+  const [lawyers, setLawyers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [rowsPerPage] = useState(10);
-  const [showModel, setShowModel] = useState(false);
-  const [selectedRestaurantId, setSelectedRestaurantId] = useState(null);
-
-  const handleCloseModal = () => {
-    setShowModel(false);
-    setSelectedRestaurantId(null);
-  };
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetch(`${url}/dashboardAdmin`)
-      .then((res) => res.json())
-      .then((json) => {
-        const sortedRestaurants = json.restaurants;
-        setRestaurants(sortedRestaurants);
-      })
-      .catch((error) => {
-        console.error("Error fetching restaurants:", error);
-        toast.error("Failed to fetch restaurants");
-      });
+    const fetchLawyers = async () => {
+      const lawyersCollection = collection(db, "lawyers_information");
+      const lawyersSnapshot = await getDocs(lawyersCollection);
+      const lawyersData = [];
+
+      for (const lawyerDoc of lawyersSnapshot.docs) {
+        const lawyerData = lawyerDoc.data();
+        const lawyerStatsDoc = await getDoc(doc(db, "lawyer_stats", lawyerDoc.id));
+        const lawyerStatsData = lawyerStatsDoc.exists() ? lawyerStatsDoc.data() : {};
+
+        lawyersData.push({
+          id: lawyerDoc.id,
+          name: `${lawyerData.firstName} ${lawyerData.lastName}`,
+          phone: lawyerData.phone,
+          rating: lawyerStatsData.average_rating || "N/A",
+          cases: lawyerStatsData.total_cases || "N/A",
+          account_status: lawyerData.account_status || "Approved", // Default to Approved if not set
+        });
+      }
+
+      setLawyers(lawyersData);
+    };
+
+    fetchLawyers();
   }, []);
 
   const handleSearchInputChange = (event) => {
@@ -117,22 +58,41 @@ const Restaurants = () => {
     setPage(1);
   };
 
-  const filteredRestaurants = restaurants.filter((res) => {
+  const filteredLawyers = lawyers.filter((lawyer) => {
     return (
-      res.restaurant_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      res.id.toString().includes(searchQuery.toLowerCase())
+      lawyer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      lawyer.id.toLowerCase().includes(searchQuery.toLowerCase())
     );
   });
 
   const indexOfLastItem = page * rowsPerPage;
   const indexOfFirstItem = indexOfLastItem - rowsPerPage;
-  const currentItems = filteredRestaurants.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
+  const currentItems = filteredLawyers.slice(indexOfFirstItem, indexOfLastItem);
 
   const handlePageChange = (event, value) => {
     setPage(value);
+  };
+
+  const handleTerminateClick = async (lawyerId, currentStatus) => {
+    const newStatus = currentStatus === "Hold" ? "Approved" : "Hold";
+    setLoading(true);
+    try {
+      const lawyerDocRef = doc(db, "lawyers_information", lawyerId);
+      await updateDoc(lawyerDocRef, { account_status: newStatus });
+      toast.success(`Lawyer account status updated to ${newStatus}`);
+      
+      // Update the local state to reflect the change
+      setLawyers((prevLawyers) =>
+        prevLawyers.map((lawyer) =>
+          lawyer.id === lawyerId ? { ...lawyer, account_status: newStatus } : lawyer
+        )
+      );
+    } catch (error) {
+      console.error("Error updating lawyer account status:", error);
+      toast.error("Failed to update lawyer account status");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -145,9 +105,9 @@ const Restaurants = () => {
         sx={{ border: "2px solid" }}
       >
         <div className="d-flex justify-content-between align-items-center">
-          <h3 className="ms-4 my-0">Restaurants List</h3>
+          <h3 className="ms-4 my-0">Lawyers</h3>
           <TextField
-            label="Search Restaurant"
+            label="Search Lawyers"
             variant="filled"
             color="primary"
             value={searchQuery}
@@ -161,16 +121,16 @@ const Restaurants = () => {
                 ID
               </TableCell>
               <TableCell className="fw-bold" align="center">
-                Restaurants
+                Name
               </TableCell>
               <TableCell className="fw-bold" align="center">
-                Contact
+                Phone
               </TableCell>
               <TableCell className="fw-bold" align="center">
-                Orders
+                Rating
               </TableCell>
               <TableCell className="fw-bold" align="center">
-                Status
+                Cases
               </TableCell>
               <TableCell className="fw-bold" align="center">
                 Actions
@@ -178,33 +138,21 @@ const Restaurants = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {currentItems.map((res) => (
-              <TableRow key={res.id}>
-                <TableCell align="center">{res.id}</TableCell>
-                <TableCell align="center">{res.restaurant_name}</TableCell>
-                <TableCell align="center">{res.contact_details}</TableCell>
-                <TableCell align="center">{res.orders}</TableCell>
-                <TableCell
-                  align="center"
-                  className={`${
-                    res.terminate === false ? "text-success" : "text-danger"
-                  } text-center fw-bold`}
-                >
-                  {res.terminate === false ? "Running" : "Terminated"}
-                </TableCell>
+            {currentItems.map((lawyer) => (
+              <TableRow key={lawyer.id}>
+                <TableCell align="center">{lawyer.id}</TableCell>
+                <TableCell align="center">{lawyer.name}</TableCell>
+                <TableCell align="center">{lawyer.phone}</TableCell>
+                <TableCell align="center">{lawyer.rating}</TableCell>
+                <TableCell align="center">{lawyer.cases}</TableCell>
                 <TableCell align="center">
-                  {res.terminate === false && (
-                    <button
-                      type="button"
-                      className="btn btn-danger"
-                      onClick={() => {
-                        setSelectedRestaurantId(res.id);
-                        setShowModel(true);
-                      }}
-                    >
-                      Terminate
-                    </button>
-                  )}
+                  <Button
+                    color={lawyer.account_status === "Hold" ? "primary" : "error"}
+                    onClick={() => handleTerminateClick(lawyer.id, lawyer.account_status)}
+                    disabled={loading}
+                  >
+                    {lawyer.account_status === "Hold" ? "Restore" : "Terminate"}
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -213,19 +161,17 @@ const Restaurants = () => {
       </TableContainer>
       <div className="d-flex justify-content-center mt-3">
         <Pagination
-          count={Math.ceil(filteredRestaurants.length / rowsPerPage)}
+          count={Math.ceil(filteredLawyers.length / rowsPerPage)}
           page={page}
           onChange={handlePageChange}
         />
       </div>
-      {showModel && (
-        <Modal
-          selectedRestaurantId={selectedRestaurantId}
-          handleCloseModal={handleCloseModal}
-        />
-      )}
+      <ToastContainer />
+      <Backdrop open={loading} style={{ zIndex: 1000 }}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   );
 };
 
-export default Restaurants;
+export default Lawyers;
