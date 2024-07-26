@@ -18,12 +18,14 @@ import { Link } from "react-router-dom";
 import logo from "./assets/logo.png";
 import Dashboard from "./pages/dashboard";
 import Error from "./pages/error";
+import NewLawyers from "./components/new_lawyers";
 
 const SidebarData = [
   { id: 1, title: "Dashboard", path: "/" },
   { id: 2, title: "Lawyers", path: "/restaurants" },
   { id: 3, title: "Users", path: "/users" },
-  { id: 4, title: "Add User", path: "/register" },
+  { id: 4, title: "New Lawyers", path: "/newlawyers" },
+  { id: 5, title: "Add User", path: "/register" },
   { id: 6, title: "Log Out", path: "/login" },
 ];
 
@@ -121,6 +123,10 @@ function App() {
             <Route
               path="/users"
               element={token ? <Users /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/newlawyers"
+              element={token ? <NewLawyers /> : <Navigate to="/login" />}
             />
             <Route
               path="/register"

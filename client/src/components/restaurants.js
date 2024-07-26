@@ -133,6 +133,9 @@ const Lawyers = () => {
                 Cases
               </TableCell>
               <TableCell className="fw-bold" align="center">
+                Account Status
+              </TableCell>
+              <TableCell className="fw-bold" align="center">
                 Actions
               </TableCell>
             </TableRow>
@@ -145,6 +148,7 @@ const Lawyers = () => {
                 <TableCell align="center">{lawyer.phone}</TableCell>
                 <TableCell align="center">{lawyer.rating}</TableCell>
                 <TableCell align="center">{lawyer.cases}</TableCell>
+                <TableCell align="center">{lawyer.account_status}</TableCell>
                 <TableCell align="center">
                   <Button
                     color={lawyer.account_status === "Hold" ? "primary" : "error"}
