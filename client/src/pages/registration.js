@@ -2,14 +2,19 @@ import React, { useState } from "react";
 import { Container, TextField, Button, Typography, Paper } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase"; // Ensure this path is correct
+// service_2udt1xm
 
 const Registration = () => {
   const [user, setUser] = useState({
-    username: "",
+    firstname: "",
+    lastname: "",
     email: "",
     password: "",
     confirmPassword: "",
-    role: "",
+    role: "admin", // default role as admin
   });
 
   const handleChange = (e) => {
@@ -20,46 +25,46 @@ const Registration = () => {
     }));
   };
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
-    // console.log(user);
+    const auth = getAuth();
     try {
-      if (!user.password) {
-        toast.error("Please, write Username");
+      if (!user.firstname) {
+        toast.error("Please, enter First Name");
+      } else if (!user.lastname) {
+        toast.error("Please, enter Last Name");
       } else if (!user.email) {
-        toast.error("Please, write Email");
+        toast.error("Please, enter Email");
       } else if (!user.password) {
-        toast.error("Please, write Password");
+        toast.error("Please, enter Password");
       } else if (user.confirmPassword !== user.password) {
         toast.error("Password does not match");
-      } else if (!user.role) {
-        toast.error("Please, write role");
       } else {
-        fetch(`http://localhost:Admin/signupAdmin`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            user,
-          }),
-        })
-          .then((res) => res.json())
-          .then((json) => {
-            if (json.success === true) {
-              toast.success("New Role Added");
-            }
-          });
+        // Create user with Firebase authentication
+        const userCredential = await createUserWithEmailAndPassword(auth, user.email, user.password);
+        const uid = userCredential.user.uid;
+
+        // Save additional user info to Firestore
+        await setDoc(doc(db, "admin", uid), {
+          firstname: user.firstname,
+          lastname: user.lastname,
+          role: user.role,
+        });
+
+        toast.success("New Admin Added");
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error during registration:", error);
+      toast.error("Failed to register user");
     }
+
     setUser({
-      username: "",
+      firstname: "",
+      lastname: "",
       email: "",
       password: "",
       confirmPassword: "",
-      role: "",
+      role: "admin",
     });
   };
 
@@ -81,16 +86,26 @@ const Registration = () => {
       >
         <div style={{ textAlign: "center" }}>
           <Typography variant="h4" style={{ textAlign: "center" }}>
-            Registration
+            Add New Admin
           </Typography>
           <form onSubmit={handleSignUp}>
             <TextField
-              label="Username"
+              label="First Name"
               variant="outlined"
               margin="normal"
               fullWidth
-              name="username"
-              value={user.username}
+              name="firstname"
+              value={user.firstname}
+              onChange={handleChange}
+              color="primary"
+            />
+            <TextField
+              label="Last Name"
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              name="lastname"
+              value={user.lastname}
               onChange={handleChange}
               color="primary"
             />
@@ -126,16 +141,6 @@ const Registration = () => {
               onChange={handleChange}
               color="primary"
             />
-            <TextField
-              label="Role"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              name="role"
-              value={user.role}
-              onChange={handleChange}
-              color="primary"
-            />
             <Button
               variant="contained"
               color="primary"
@@ -143,9 +148,9 @@ const Registration = () => {
               fullWidth
               style={{ marginTop: "20px" }}
             >
-              Register
+              Create Admin
             </Button>
-            <ToastContainer s />
+            <ToastContainer />
           </form>
         </div>
       </Paper>
