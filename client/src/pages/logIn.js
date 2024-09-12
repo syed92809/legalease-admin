@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { auth, db } from '../firebase'; // Import Firebase configuration
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-
+import background from "../assets/login-bg.png"
 const LogIn = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -45,23 +45,33 @@ const LogIn = ({ setIsLoggedIn }) => {
   };
 
   const paperStyle = {
-    height: "auto",
+    height: 500,
     width: 350,
-    margin: "25% auto",
     padding: 20,
+    marginTop:30,
     textAlign: "center",
     color: "#404156",
-  };
 
+  };
+  const loginContainerStyle = {
+    backgroundImage: `url(${background})`,
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+    backgroundPosition: "center center",
+    height: "90vh",   
+    width: '100%',
+    backgroundAttachment: 'fixed'
+  };
   return (
     <>
+     <div style={loginContainerStyle}>
       <ToastContainer />
       <Container maxWidth="xs">
         <Paper
           variant="outlined"
           elevation={10}
           style={paperStyle}
-          sx={{ border: "3px solid" }}
+          sx={{ border: "1px solid" }}
         >
           <div style={{ textAlign: "center" }}>
             <Typography variant="h4" gutterBottom>
@@ -93,7 +103,7 @@ const LogIn = ({ setIsLoggedIn }) => {
                 fullWidth
                 color="primary"
                 type="submit"
-                style={{ marginTop: "20px" }}
+                style={{ marginTop: "20px", borderRadius:'15px' }}
               >
                 Log In
               </Button>
@@ -109,10 +119,24 @@ const LogIn = ({ setIsLoggedIn }) => {
               >
                 Forgot Password?
               </Button>
+              <Button
+                variant="body2"
+                color="textSecondary"
+                style={{
+                  marginTop: "10px",
+                  textAlign: "right",
+                  cursor: "pointer",
+                }}
+                onClick={() => navigate("/forgotPassword")}
+              >
+                Create New Account
+              </Button>
+
             </form>
           </div>
         </Paper>
       </Container>
+      </div>
     </>
   );
 };
